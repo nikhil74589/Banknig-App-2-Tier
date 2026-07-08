@@ -2,16 +2,19 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+# Install curl
 RUN apt-get update && \
-    apt-get install -v default-libmysqlclient-dev build-essential pkg-config curl && \
+    apt-get install -y curl && \
     rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
 EXPOSE 5000
 
-CMD ["gunicorn","--bind","0.0.0.0:5000","--workers" , "2" , "app:app"]
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+CMD curl -f http://localhost:5000/ || exit 1
+
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
