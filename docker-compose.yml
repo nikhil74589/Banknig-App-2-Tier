@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   simplebank:
-    image: 127348474924.dkr.ecr.us-east-2.amazonaws.com/flaskapp-simple-bank:${IMAGE_TAG:-latest}
+    image: 127348474924.dkr.ecr.us-east-2.amazonaws.com/flaskapp-simple-bank:v1
     container_name: simplebank
     ports:
       - "5000:5000"
