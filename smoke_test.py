@@ -7,7 +7,7 @@ client = boto3.client("ssm", region_name="us-east-2")
 
 # Read parameters from AWS SSM Parameter Store
 params = {
-    os.path.basename(p["Name"]): p["Value"] 
+    os.path.basename(p["Name"]): p["Value"]
     for p in client.get_parameters_by_path(
         Path="/application/banking",
         WithDecryption=True
@@ -15,6 +15,7 @@ params = {
 }
 
 required = ["DB_HOST", "DB_NAME", "DB_USER", "DB_PASSWORD", "DB_PORT"]
+
 missing = [k for k in required if k not in params]
 
 # Check required parameters
@@ -40,9 +41,11 @@ try:
     )
 
     cur = connection.cursor()
+
     cur.execute("SHOW TABLES")
     tables = [row[0] for row in cur.fetchall()]
 
+    cur.close()
     connection.close()
 
     print(f"\nDatabase: {params['DB_NAME']}")
