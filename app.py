@@ -46,6 +46,12 @@ def home():
     return render_template('home.html')
 
 
+# ─── Health Check ───────────────────────────────────────
+@app.route('/health')
+def health():
+    return {"status": "healthy"}, 200
+
+
 # ─── Register ───────────────────────────────────────────
 @app.route('/register', methods=['GET', 'POST'])
 def register():
