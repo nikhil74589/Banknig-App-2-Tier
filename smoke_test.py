@@ -14,7 +14,13 @@ params = {
     )["Parameters"]
 }
 
-required = ["DB_HOST", "DB_NAME", "DB_USER", "DB_PASSWORD", "DB_PORT"]
+required = [
+    "DB_HOST",
+    "DB_NAME",
+    "DB_USER",
+    "DB_PASSWORD",
+    "DB_PORT"
+]
 
 missing = [k for k in required if k not in params]
 
@@ -29,6 +35,7 @@ if missing:
     print(f"Failed: Missing parameters {missing}")
     sys.exit(1)
 
+
 # Connect to MySQL database and list tables
 try:
     connection = pymysql.connect(
@@ -42,17 +49,24 @@ try:
 
     cur = connection.cursor()
 
+    print("\nConnected successfully ✅")
+
     cur.execute("SHOW TABLES")
+
     tables = [row[0] for row in cur.fetchall()]
+
+    print(f"Database: {params['DB_NAME']}")
+
+    if tables:
+        print("Tables:")
+        for table in tables:
+            print(f"- {table}")
+    else:
+        print("No tables found")
 
     cur.close()
     connection.close()
 
-    print(f"\nDatabase: {params['DB_NAME']}")
-    print(f"Tables: {tables}")
-
 except Exception as e:
     print("DB ERROR ❌:", e)
     sys.exit(1)
-
-print("✅ Smoke test Done")
